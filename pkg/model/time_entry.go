@@ -1,10 +1,10 @@
 package model
 
 type GetTimeEntriesQuery struct {
-	Since     int    `json:"since"`
-	Before    string `json:"before"`
-	StartDate string `json:"start_date"`
-	EndDate   string `json:"end_date"`
+	Since     *int    `json:"since"`
+	Before    *string `json:"before"`
+	StartDate *string `json:"start_date"`
+	EndDate   *string `json:"end_date"`
 }
 
 type baseTimeEntry struct {

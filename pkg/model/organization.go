@@ -41,14 +41,14 @@ type UpdateOrganizationRequest struct {
 }
 
 type GetOrganizationUsersQuery struct {
-	Filter       string `json:"filter"`
-	ActiveStatus string `json:"active_status"`
-	OnlyAdmins   string `json:"only_admins"`
-	Groups       string `json:"groups"`
-	Workspaces   string `json:"workspaces"`
-	Page         int    `json:"page"`
-	PerPage      int    `json:"per_page"`
-	SortDir      string `json:"sort_dir"`
+	Filter       *string `json:"filter"`
+	ActiveStatus *string `json:"active_status"`
+	OnlyAdmins   *string `json:"only_admins"`
+	Groups       *string `json:"groups"`
+	Workspaces   *string `json:"workspaces"`
+	Page         *int    `json:"page"`
+	PerPage      *int    `json:"per_page"`
+	SortDir      *string `json:"sort_dir"`
 }
 
 type GetOrganizationUsersResponse struct {

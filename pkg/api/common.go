@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	Domain = "https://api.track.toggl.com/api/v9"
+	Domain = "https://api.track.toggl.com%s"
 )
 
 type TogglContext struct {
@@ -24,12 +24,12 @@ func NewToggleContext(ctx context.Context, user, password string) *TogglContext 
 	return &TogglContext{context: ctx, user: user, password: password}
 }
 
-func DoRequest[O interface{}](method, url string, ctx *TogglContext) (*O, error) {
-	return DoRequestWithBody[*any, O](method, url, ctx, nil)
+func doRequest[O interface{}](method, url string, ctx *TogglContext) (*O, error) {
+	return doRequestWithBody[*any, O](method, url, ctx, nil)
 }
 
-func DoRequestWithBody[I interface{}, O interface{}](method, url string, ctx *TogglContext, req *I) (*O, error) {
-	var buffer *bytes.Buffer
+func doRequestWithBody[I interface{}, O interface{}](method, url string, ctx *TogglContext, req *I) (*O, error) {
+	var buffer = bytes.NewBuffer([]byte("{}"))
 	if req != nil {
 		data, err := json.Marshal(req)
 		if err != nil {
@@ -58,10 +58,6 @@ func DoRequestWithBody[I interface{}, O interface{}](method, url string, ctx *To
 		return nil, err
 	}
 
-	if err != nil {
-		return nil, err
-	}
-
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
@@ -72,7 +68,7 @@ func DoRequestWithBody[I interface{}, O interface{}](method, url string, ctx *To
 	}
 
 	var resp *O
-	err = json.Unmarshal(body, resp)
+	err = json.Unmarshal(body, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -80,31 +76,24 @@ func DoRequestWithBody[I interface{}, O interface{}](method, url string, ctx *To
 	return resp, nil
 }
 
-func FormatQuery(query any) string {
+func formatQuery(query any) string {
 	formatted := ""
 	v := reflect.ValueOf(query)
+	tQuery := reflect.TypeOf(query)
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
-		t := field.Type()
-		if t.Kind() == reflect.Pointer {
-			t = t.Elem()
+		var fieldValue reflect.Value
+		if field.Type().Kind() == reflect.Pointer {
+			fieldValue = field.Elem()
+		} else {
+			fieldValue = field
 		}
 
-		var value any
-		switch t.Kind() {
-		case reflect.String:
-			value = field.String()
-		case reflect.Bool:
-			value = field.Bool()
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			value = field.Int()
-		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-			value = field.Uint()
-		case reflect.Float32, reflect.Float64:
-			value = field.Float()
-		default:
-			value = ""
+		if field.IsNil() {
+			continue
 		}
+
+		value := fieldValue.Interface()
 
 		if value == "" {
 			continue
@@ -116,7 +105,7 @@ func FormatQuery(query any) string {
 			formatted = formatted + "&"
 		}
 
-		formatted = fmt.Sprintf("%s%s=%s", formatted, t.Field(i).Tag.Get("json"), value)
+		formatted = fmt.Sprintf("%s%s=%v", formatted, tQuery.Field(i).Tag.Get("json"), value)
 	}
 
 	return formatted

@@ -1,8 +1,8 @@
 package model
 
 type GetProjectUsersQuery struct {
-	ProjectIDs       string `json:"project_ids"`
-	WithGroupMembers bool   `json:"with_group_members"`
+	ProjectIDs       *string `json:"project_ids"`
+	WithGroupMembers *bool   `json:"with_group_members"`
 }
 
 type baseProjectUser struct {
@@ -53,18 +53,18 @@ type UpdateProjectUserResponse struct {
 }
 
 type GetWorkspaceProjectsQuery struct {
-	Active        bool   `json:"active"`
-	Since         int    `json:"since"`
-	Billable      bool   `json:"billable"`
-	UserIDs       []int  `json:"user_ids"`
-	ClientIDs     []int  `json:"client_ids"`
-	GroupIDs      []int  `json:"group_ids"`
-	Name          string `json:"name"`
-	Page          int    `json:"page"`
-	SortField     string `json:"sort_field"`
-	SortOrder     string `json:"sort_order"`
-	OnlyTemplates bool   `json:"only_templates"`
-	PerPage       int    `json:"per_page"`
+	Active        *bool   `json:"active"`
+	Since         *int    `json:"since"`
+	Billable      *bool   `json:"billable"`
+	UserIDs       *[]int  `json:"user_ids"`
+	ClientIDs     *[]int  `json:"client_ids"`
+	GroupIDs      *[]int  `json:"group_ids"`
+	Name          *string `json:"name"`
+	Page          *int    `json:"page"`
+	SortField     *string `json:"sort_field"`
+	SortOrder     *string `json:"sort_order"`
+	OnlyTemplates *bool   `json:"only_templates"`
+	PerPage       *int    `json:"per_page"`
 }
 
 type baseProject struct {
