@@ -21,7 +21,7 @@ type TogglContext struct {
 	password string
 }
 
-func NewToggleContext(ctx context.Context, user, password string) *TogglContext {
+func NewTogglContext(ctx context.Context, user, password string) *TogglContext {
 	return &TogglContext{context: ctx, user: user, password: password}
 }
 
