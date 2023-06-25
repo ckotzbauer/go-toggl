@@ -7,7 +7,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"reflect"
+
+	"github.com/google/go-querystring/query"
 )
 
 var (
@@ -29,7 +30,7 @@ func doRequest[O interface{}](method, url string, ctx *TogglContext) (*O, error)
 }
 
 func doRequestWithBody[I interface{}, O interface{}](method, url string, ctx *TogglContext, req *I) (*O, error) {
-	var buffer = bytes.NewBuffer([]byte("{}"))
+	var buffer *bytes.Buffer
 	if req != nil {
 		data, err := json.Marshal(req)
 		if err != nil {
@@ -39,7 +40,15 @@ func doRequestWithBody[I interface{}, O interface{}](method, url string, ctx *To
 		buffer = bytes.NewBuffer(data)
 	}
 
-	request, err := http.NewRequestWithContext(ctx.context, http.MethodPost, fmt.Sprintf(Domain, url), buffer)
+	var request *http.Request
+	var err error
+
+	if buffer == nil {
+		request, err = http.NewRequestWithContext(ctx.context, method, fmt.Sprintf(Domain, url), nil)
+	} else {
+		request, err = http.NewRequestWithContext(ctx.context, method, fmt.Sprintf(Domain, url), buffer)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -70,45 +79,20 @@ func doRequestWithBody[I interface{}, O interface{}](method, url string, ctx *To
 	var resp *O
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error %w: %s", err, string(body))
 	}
 
 	return resp, nil
 }
 
-func formatQuery(query any) string {
-	formatted := ""
-	v := reflect.ValueOf(query)
-	tQuery := reflect.TypeOf(query)
-	for i := 0; i < v.NumField(); i++ {
-		field := v.Field(i)
-		var fieldValue reflect.Value
-		if field.Type().Kind() == reflect.Pointer {
-			fieldValue = field.Elem()
-		} else {
-			fieldValue = field
-		}
-
-		if field.IsNil() {
-			continue
-		}
-
-		value := fieldValue.Interface()
-
-		if value == "" {
-			continue
-		}
-
-		if formatted == "" {
-			formatted = formatted + "?"
-		} else {
-			formatted = formatted + "&"
-		}
-
-		formatted = fmt.Sprintf("%s%s=%v", formatted, tQuery.Field(i).Tag.Get("json"), value)
+func formatQuery(opt any) string {
+	v, _ := query.Values(opt)
+	q := v.Encode()
+	if q != "" {
+		return "?" + q
+	} else {
+		return q
 	}
-
-	return formatted
 }
 
 func checkClose(c io.Closer, err *error) {

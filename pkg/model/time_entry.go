@@ -1,27 +1,77 @@
 package model
 
 type GetTimeEntriesQuery struct {
-	Since     *int    `json:"since"`
-	Before    *string `json:"before"`
-	StartDate *string `json:"start_date"`
-	EndDate   *string `json:"end_date"`
+	Since     int    `json:"since,omitempty"`
+	Before    string `json:"before,omitempty"`
+	StartDate string `json:"start_date,omitempty"`
+	EndDate   string `json:"end_date,omitempty"`
 }
 
-type baseTimeEntry struct {
+type GetTimeEntriesResponse struct {
+	Billable        bool     `json:"billable"`
+	CreatedWith     string   `json:"created_with"`
+	Description     string   `json:"description,omitempty"`
+	Duration        int      `json:"duration"`
+	Duronly         bool     `json:"duronly"`
+	Pid             int      `json:"pid"`
+	ProjectID       int      `json:"project_id,omitempty"`
+	StartDate       string   `json:"start_date"`
+	Start           string   `json:"start"`
+	Stop            string   `json:"stop"`
+	TagAction       string   `json:"tag_action"`
+	TagIDs          []int    `json:"tag_ids"`
+	Tags            []string `json:"tags"`
+	TaskID          int      `json:"task_id,omitempty"`
+	Tid             int      `json:"tid"`
+	Uid             int      `json:"uid"`
+	UserID          int      `json:"user_id"`
+	Wid             int      `json:"wid"`
+	WorkspaceID     int      `json:"workspace_id"`
+	At              string   `json:"at"`
+	ID              int      `json:"id"`
+	ServerDeletedAt string   `json:"server_deleted_at,omitempty"`
+}
+
+type GetCurrentTimeEntryResponse struct {
+	Billable        bool     `json:"billable"`
+	CreatedWith     string   `json:"created_with"`
+	Description     string   `json:"description,omitempty"`
+	Duration        int      `json:"duration"`
+	Duronly         bool     `json:"duronly"`
+	Pid             int      `json:"pid"`
+	ProjectID       int      `json:"project_id,omitempty"`
+	StartDate       string   `json:"start_date"`
+	Start           string   `json:"start"`
+	Stop            string   `json:"stop"`
+	TagAction       string   `json:"tag_action"`
+	TagIDs          []int    `json:"tag_ids"`
+	Tags            []string `json:"tags"`
+	TaskID          int      `json:"task_id,omitempty"`
+	Tid             int      `json:"tid"`
+	Uid             int      `json:"uid"`
+	UserID          int      `json:"user_id"`
+	Wid             int      `json:"wid"`
+	WorkspaceID     int      `json:"workspace_id"`
+	At              string   `json:"at"`
+	ID              int      `json:"id"`
+	ServerDeletedAt string   `json:"server_deleted_at,omitempty"`
+}
+
+type CreateTimeEntryRequest struct {
 	Billable    bool     `json:"billable"`
 	CreatedWith string   `json:"created_with"`
-	Description *string  `json:"description"`
+	Description string   `json:"description,omitempty"`
 	Duration    int      `json:"duration"`
 	Duronly     bool     `json:"duronly"`
 	Pid         int      `json:"pid"`
-	ProjectID   *int     `json:"project_id"`
+	ProjectID   int      `json:"project_id,omitempty"`
 	StartDate   string   `json:"start_date"`
 	Start       string   `json:"start"`
 	Stop        string   `json:"stop"`
 	TagAction   string   `json:"tag_action"`
 	TagIDs      []int    `json:"tag_ids"`
 	Tags        []string `json:"tags"`
-	TaskID      *int     `json:"task_id"`
+	TaskID      int      `json:"task_id,omitempty"`
 	Tid         int      `json:"tid"`
 	Uid         int      `json:"uid"`
 	UserID      int      `json:"user_id"`
@@ -29,27 +79,29 @@ type baseTimeEntry struct {
 	WorkspaceID int      `json:"workspace_id"`
 }
 
-type timeEntry struct {
-	baseTimeEntry
-	At              string  `json:"at"`
-	ID              int     `json:"id"`
-	ServerDeletedAt *string `json:"server_deleted_at"`
-}
-
-type GetTimeEntriesResponse struct {
-	timeEntry
-}
-
-type GetCurrentTimeEntryResponse struct {
-	timeEntry
-}
-
-type CreateTimeEntryRequest struct {
-	baseTimeEntry
-}
-
 type CreateTimeEntryResponse struct {
-	timeEntry
+	Billable        bool     `json:"billable"`
+	CreatedWith     string   `json:"created_with"`
+	Description     string   `json:"description,omitempty"`
+	Duration        int      `json:"duration"`
+	Duronly         bool     `json:"duronly"`
+	Pid             int      `json:"pid"`
+	ProjectID       int      `json:"project_id,omitempty"`
+	StartDate       string   `json:"start_date"`
+	Start           string   `json:"start"`
+	Stop            string   `json:"stop"`
+	TagAction       string   `json:"tag_action"`
+	TagIDs          []int    `json:"tag_ids"`
+	Tags            []string `json:"tags"`
+	TaskID          int      `json:"task_id,omitempty"`
+	Tid             int      `json:"tid"`
+	Uid             int      `json:"uid"`
+	UserID          int      `json:"user_id"`
+	Wid             int      `json:"wid"`
+	WorkspaceID     int      `json:"workspace_id"`
+	At              string   `json:"at"`
+	ID              int      `json:"id"`
+	ServerDeletedAt string   `json:"server_deleted_at,omitempty"`
 }
 
 type UpdateMultipleTimeEntriesRequest struct {
@@ -67,13 +119,73 @@ type UpdateMultipleTimeEntriesResponse struct {
 }
 
 type UpdateTimeEntryRequest struct {
-	baseTimeEntry
+	Billable    bool     `json:"billable"`
+	CreatedWith string   `json:"created_with"`
+	Description string   `json:"description,omitempty"`
+	Duration    int      `json:"duration"`
+	Duronly     bool     `json:"duronly"`
+	Pid         int      `json:"pid"`
+	ProjectID   int      `json:"project_id,omitempty"`
+	StartDate   string   `json:"start_date"`
+	Start       string   `json:"start"`
+	Stop        string   `json:"stop"`
+	TagAction   string   `json:"tag_action"`
+	TagIDs      []int    `json:"tag_ids"`
+	Tags        []string `json:"tags"`
+	TaskID      int      `json:"task_id,omitempty"`
+	Tid         int      `json:"tid"`
+	Uid         int      `json:"uid"`
+	UserID      int      `json:"user_id"`
+	Wid         int      `json:"wid"`
+	WorkspaceID int      `json:"workspace_id"`
 }
 
 type UpdateTimeEntryResponse struct {
-	timeEntry
+	Billable        bool     `json:"billable"`
+	CreatedWith     string   `json:"created_with"`
+	Description     string   `json:"description,omitempty"`
+	Duration        int      `json:"duration"`
+	Duronly         bool     `json:"duronly"`
+	Pid             int      `json:"pid"`
+	ProjectID       int      `json:"project_id,omitempty"`
+	StartDate       string   `json:"start_date"`
+	Start           string   `json:"start"`
+	Stop            string   `json:"stop"`
+	TagAction       string   `json:"tag_action"`
+	TagIDs          []int    `json:"tag_ids"`
+	Tags            []string `json:"tags"`
+	TaskID          int      `json:"task_id,omitempty"`
+	Tid             int      `json:"tid"`
+	Uid             int      `json:"uid"`
+	UserID          int      `json:"user_id"`
+	Wid             int      `json:"wid"`
+	WorkspaceID     int      `json:"workspace_id"`
+	At              string   `json:"at"`
+	ID              int      `json:"id"`
+	ServerDeletedAt string   `json:"server_deleted_at,omitempty"`
 }
 
 type StopTimeEntryResponse struct {
-	timeEntry
+	Billable        bool     `json:"billable"`
+	CreatedWith     string   `json:"created_with"`
+	Description     string   `json:"description,omitempty"`
+	Duration        int      `json:"duration"`
+	Duronly         bool     `json:"duronly"`
+	Pid             int      `json:"pid"`
+	ProjectID       int      `json:"project_id,omitempty"`
+	StartDate       string   `json:"start_date"`
+	Start           string   `json:"start"`
+	Stop            string   `json:"stop"`
+	TagAction       string   `json:"tag_action"`
+	TagIDs          []int    `json:"tag_ids"`
+	Tags            []string `json:"tags"`
+	TaskID          int      `json:"task_id,omitempty"`
+	Tid             int      `json:"tid"`
+	Uid             int      `json:"uid"`
+	UserID          int      `json:"user_id"`
+	Wid             int      `json:"wid"`
+	WorkspaceID     int      `json:"workspace_id"`
+	At              string   `json:"at"`
+	ID              int      `json:"id"`
+	ServerDeletedAt string   `json:"server_deleted_at,omitempty"`
 }

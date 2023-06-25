@@ -1,11 +1,13 @@
 package model
 
+type Workspace struct {
+	Admin       bool `json:"admin"`
+	WorkspaceID int  `json:"workspace_id"`
+}
+
 type CreateInvitationRequest struct {
-	Emails     []string `json:"emails"`
-	Workspaces []struct {
-		Admin       bool `json:"admin"`
-		WorkspaceID int  `json:"workspace_id"`
-	} `json:"workspaces"`
+	Emails     []string    `json:"emails"`
+	Workspaces []Workspace `json:"workspaces"`
 }
 
 type CreateInvitationResponse struct {
